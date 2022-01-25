@@ -89,15 +89,17 @@ module tray_handles() {
     }
 }
 
-module tray_funnel(funnel_length_mm = 50) {
+module tray_funnel(funnel_length_mm) {
+    funnel_lip_length_mm = 30;
+    cutout_length = funnel_length_mm + tray_wall_thickness_mm ;
+    cylinder_offset = 60;
     translate([-tray_wall_thickness_mm, 0, 0]) {
-            difference() {
-                cube([tray_width_mm + tray_wall_thickness_mm, tray_insert_depth + tray_wall_thickness_mm, funnel_length_mm + tray_wall_thickness_mm]);
-                cutout_length = funnel_length_mm + tray_wall_thickness_mm ;
-                rotate([270,0,0]) {
-                    translate([tray_wall_thickness_mm,-cutout_length,tray_wall_thickness_mm]) {
-                        cube([tray_width_mm - tray_wall_thickness_mm, cutout_length + 20, tray_insert_depth - tray_wall_thickness_mm]);
-                    }
+            rotate([180,0,0]) {
+                difference() {
+                    cube([tray_width_mm + tray_wall_thickness_mm, tray_insert_depth + tray_wall_thickness_mm + funnel_lip_length_mm, funnel_length_mm + tray_wall_thickness_mm]);
+                    translate([tray_wall_thickness_mm-4,tray_width_mm - cylinder_offset,-10])
+                            rotate([0,90,0])
+                                cylinder(tray_width_mm+2, r=cylinder_offset+25);
                 }
             }
 
@@ -109,7 +111,7 @@ module tray() {
     tray_walls();
     tray_bottom();
     tray_handles();
-    translate([0, 0, -funnel_length_mm]) {
+    translate([0, 56, 0]) {
         tray_funnel(funnel_length_mm);
     }
 }
