@@ -13,16 +13,24 @@ tray_width_mm = rack_width_mm * 0.75;
 
 
 module tray_walls() {
-    square([tray_width_mm, tray_wall_thickness_mm]);
-    translate([0, tray_insert_depth, 0]) {
+    linear_extrude(
+        height = rack_height_mm/2, 
+        center = false,  
+        slices = 20, 
+        scale = 1.0, 
+        $fn = 316
+    ) {
         square([tray_width_mm, tray_wall_thickness_mm]);
-    }
-    rotate(a = 90) {
-        square([tray_insert_depth + tray_wall_thickness_mm, tray_wall_thickness_mm]);
-    }
-    rotate(a = 90)  {
-        translate([0, -tray_width_mm, 0]) {
+        translate([0, tray_insert_depth, 0]) {
+            square([tray_width_mm, tray_wall_thickness_mm]);
+        }
+        rotate(a = 90) {
             square([tray_insert_depth + tray_wall_thickness_mm, tray_wall_thickness_mm]);
+        }
+        rotate(a = 90)  {
+            translate([0, -tray_width_mm, 0]) {
+                square([tray_insert_depth + tray_wall_thickness_mm, tray_wall_thickness_mm]);
+            }
         }
     }
 }
@@ -33,7 +41,7 @@ module tray_bottom() {
         difference() {
             square([tray_width_mm, tray_insert_depth + tray_wall_thickness_mm]);
 
-            for(i=[tray_wall_thickness_mm + sink_radius_mm: tray_width_mm - tray_wall_thickness_mm - sink_radius_mm]) {
+            for(i=[tray_wall_thickness_mm + sink_radius_mm: tray_width_mm - tray_wall_thickness_mm - sink_radius_mm * 2]) {
                 translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm)/3, 0]) {
                     circle(sink_radius_mm);
                 }
@@ -49,14 +57,7 @@ module tray_bottom() {
 }
 
 module tray() {
-    linear_extrude(
-        height = rack_height_mm/2, 
-        center = false,  
-        slices = 20, 
-        scale = 1.0, 
-        $fn = 316
-    ) 
-        tray_walls();
+    tray_walls();
     tray_bottom();
 }
 
