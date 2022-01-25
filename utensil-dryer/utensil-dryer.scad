@@ -6,7 +6,7 @@ inner_wire_diameter_mm = 3.7;
 outer_to_inner_wire_gap_mm = 26.61;
 inner_wire_gap_mm = 35;
 tray_gap_mm = 22.85;
-tray_insert_depth = 25;
+tray_insert_depth = 50;
 tray_insert_height_mm = 112;
 tray_wall_thickness_mm = 5;
 tray_width_mm = rack_width_mm * 0.75;
@@ -14,17 +14,38 @@ tray_width_mm = rack_width_mm * 0.75;
 
 module tray_walls() {
     square([tray_width_mm, tray_wall_thickness_mm]);
-    translate([0, tray_insert_depth, 0]) 
+    translate([0, tray_insert_depth, 0]) {
         square([tray_width_mm, tray_wall_thickness_mm]);
-    rotate(a = 90) 
+    }
+    rotate(a = 90) {
         square([tray_insert_depth + tray_wall_thickness_mm, tray_wall_thickness_mm]);
-    rotate(a = 90) 
-        translate([0, -tray_width_mm, 0]) 
+    }
+    rotate(a = 90)  {
+        translate([0, -tray_width_mm, 0]) {
             square([tray_insert_depth + tray_wall_thickness_mm, tray_wall_thickness_mm]);
+        }
+    }
 }
 
 module tray_bottom() {
-    square([,tray_insert_depth + tray_wall_thickness_mm]);
+    sink_radius_mm = 2;
+    linear_extrude(height = tray_wall_thickness_mm) {
+        difference() {
+            square([tray_width_mm, tray_insert_depth + tray_wall_thickness_mm]);
+
+            for(i=[tray_wall_thickness_mm + sink_radius_mm: tray_width_mm - tray_wall_thickness_mm - sink_radius_mm]) {
+                translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm)/3, 0]) {
+                    circle(sink_radius_mm);
+                }
+                translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm)*2/3, 0]) {
+                    circle(sink_radius_mm);
+                }
+                translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm), 0]) {
+                    circle(sink_radius_mm);
+                }
+            }
+        }
+    }
 }
 
 module tray() {
