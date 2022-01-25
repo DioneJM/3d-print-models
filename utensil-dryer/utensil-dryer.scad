@@ -1,7 +1,7 @@
 
 rack_width_mm = 200;
 rack_height_mm = 360;
-outer_wire_diameter_mm = 10;
+outer_wire_diameter_mm = 12;
 inner_wire_diameter_mm = 3.7;
 outer_to_inner_wire_gap_mm = 26.61;
 inner_wire_gap_mm = 35;
@@ -62,9 +62,8 @@ module tray_handles() {
     handle_height_mm = 100;
     rotate(a = [90, 0, 90]) {
         outer_cylinder_radius = outer_wire_diameter_mm*1.5;
-        translate([-tray_wall_thickness_mm - outer_wire_diameter_mm/2,tray_height-outer_cylinder_radius,-tray_wall_thickness_mm]) {
+        translate([-tray_wall_thickness_mm - outer_wire_diameter_mm/2+1,tray_height-outer_cylinder_radius,-tray_wall_thickness_mm]) {
             difference() {
-                // cylinder(handle_length, r = outer_cylinder_radius);
                 rotate(a=[0,0,-90]) {
                     handle_thickness = outer_cylinder_radius * 2.2;
                     translate([-outer_cylinder_radius,-handle_thickness+outer_cylinder_radius,0]) {
@@ -84,7 +83,14 @@ module tray_handles() {
                         cube([outer_wire_diameter_mm*2, handle_height_mm, handle_length_with_offset]);
                     }
                 }
+                rotate(a=[0,0,-90]) {
+                    handle_thickness = outer_cylinder_radius * 2.2;
+                    translate([-outer_cylinder_radius,-handle_thickness+outer_cylinder_radius,4]) {
+                        cube([handle_height_mm, outer_cylinder_radius - 10, handle_length-8]);
+                    }
+                }
             }
+
         }
     }
 }
