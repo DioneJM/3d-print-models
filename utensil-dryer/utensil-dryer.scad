@@ -1,7 +1,9 @@
 
 rack_width_mm = 200;
 rack_height_mm = 360;
-outer_wire_diameter_mm = 12;
+outer_wire_diameter_offset_mm = 1;
+outer_wire_diameter_mm = 12 + outer_wire_diameter_offset_mm;
+outer_wire_radius_mm = outer_wire_diameter_mm / 2;
 inner_wire_diameter_mm = 3.7;
 outer_to_inner_wire_gap_mm = 26.61;
 inner_wire_gap_mm = 35;
@@ -37,20 +39,20 @@ module tray_walls() {
 }
 
 module tray_bottom() {
-    sink_radius_mm = 2;
+    sink_radius_mm = 2.5;
     linear_extrude(height = tray_wall_thickness_mm) {
         difference() {
             square([tray_width_mm, tray_insert_depth + tray_wall_thickness_mm]);
 
-            for(i=[tray_wall_thickness_mm + sink_radius_mm: tray_width_mm - tray_wall_thickness_mm - sink_radius_mm * 2]) {
+            for(i=[tray_wall_thickness_mm + sink_radius_mm: 15: tray_width_mm - tray_wall_thickness_mm - sink_radius_mm * 2]) {
                 translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm)/3, 0]) {
-                    circle(sink_radius_mm);
+                    circle(r=sink_radius_mm);
                 }
                 translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm)*2/3, 0]) {
-                    circle(sink_radius_mm);
+                    circle(r=sink_radius_mm);
                 }
                 translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm), 0]) {
-                    circle(sink_radius_mm);
+                    circle(r=sink_radius_mm);
                 }
             }
         }
@@ -61,8 +63,8 @@ module tray_handles() {
     handle_length = tray_width_mm + tray_wall_thickness_mm;
     handle_height_mm = 100;
     rotate(a = [90, 0, 90]) {
-        outer_cylinder_radius = outer_wire_diameter_mm*1.5;
-        translate([-tray_wall_thickness_mm - outer_wire_diameter_mm/2+1,tray_height-outer_cylinder_radius,-tray_wall_thickness_mm]) {
+        outer_cylinder_radius = (outer_wire_radius_mm)*1.5;
+        translate([-tray_wall_thickness_mm - outer_wire_radius_mm+tray_wall_thickness_mm,tray_height-outer_cylinder_radius,-tray_wall_thickness_mm]) {
             difference() {
                 rotate(a=[0,0,-90]) {
                     handle_thickness = outer_cylinder_radius * 2.2;
@@ -76,11 +78,11 @@ module tray_handles() {
                 handle_length_with_offset = handle_length + translate_offset_z*2;
                 handle_cutout_offset_y = tray_wall_thickness_mm;
                 translate([0,-handle_cutout_offset_y,-translate_offset_z]) {
-                    cylinder(handle_length_with_offset, r = outer_wire_diameter_mm);
+                    cylinder(handle_length_with_offset, r = outer_wire_radius_mm);
                 }
-                translate([outer_wire_diameter_mm, -handle_cutout_offset_y,-translate_offset_z]) {
+                translate([outer_wire_radius_mm, -handle_cutout_offset_y,-translate_offset_z]) {
                     rotate([0,0,180]) {
-                        cube([outer_wire_diameter_mm*2, handle_height_mm, handle_length_with_offset]);
+                        cube([outer_wire_diameter_mm, handle_height_mm, handle_length_with_offset]);
                     }
                 }
                 rotate(a=[0,0,-90]) {
