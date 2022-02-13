@@ -14,7 +14,16 @@ tray_depth_mm = 10;
 
 module tray_handle(tray_width_mm, tray_depth_mm, tray_height_mm) {
     handle_wall_thickness_mm = 10;
-    cube([tray_width_mm, tray_depth_mm + handle_wall_thickness_mm, tray_height_mm]);
+    difference() {
+        cube([tray_width_mm, tray_depth_mm + handle_wall_thickness_mm, tray_height_mm]);
+        translate([-handle_wall_thickness_mm, handle_wall_thickness_mm/2, -handle_wall_thickness_mm/2]) {
+            cube([tray_width_mm*2 , tray_depth_mm, tray_height_mm]);
+        }
+    }
 }
 
-tray_handle(handle_width_mm,bed_depth_mm, handle_height_mm);
+module tray() {
+    tray_handle(handle_width_mm,bed_depth_mm, handle_height_mm);
+}
+
+tray();
