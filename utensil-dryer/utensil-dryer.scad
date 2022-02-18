@@ -44,16 +44,16 @@ module tray_bottom() {
         difference() {
             square([tray_width_mm, tray_insert_depth + tray_wall_thickness_mm]);
 
-            for(i=[tray_wall_thickness_mm + sink_radius_mm: 15: tray_width_mm - tray_wall_thickness_mm - sink_radius_mm * 2]) {
+            for(i=[tray_wall_thickness_mm + sink_radius_mm: 15:ttray_width_mm - tray_wall_thickness_mm - sink_radius_mm * 2]) {
                 translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm)/3, 0]) {
                     circle(r=sink_radius_mm);
                 }
                 translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm)*2/3, 0]) {
                     circle(r=sink_radius_mm);
                 }
-                translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm), 0]) {
-                    circle(r=sink_radius_mm);
-                }
+                // translate([i, (tray_insert_depth - tray_wall_thickness_mm - sink_radius_mm), 0]) {
+                //     circle(r=sink_radius_mm);
+                // }
             }
         }
     }
