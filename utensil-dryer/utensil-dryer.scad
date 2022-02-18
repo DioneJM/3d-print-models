@@ -61,7 +61,7 @@ module tray_bottom() {
 
 module tray_handles() {
     handle_length = tray_width_mm + tray_wall_thickness_mm;
-    handle_height_mm = 100;
+    handle_height_mm = 60;
     rotate(a = [90, 0, 90]) {
         outer_cylinder_radius = (outer_wire_radius_mm)*1.5;
         translate([-tray_wall_thickness_mm - outer_wire_radius_mm+tray_wall_thickness_mm,tray_height-outer_cylinder_radius,-tray_wall_thickness_mm]) {
@@ -100,14 +100,14 @@ module tray_handles() {
 module tray_funnel(funnel_length_mm) {
     funnel_lip_length_mm = 30;
     cutout_length = funnel_length_mm + tray_wall_thickness_mm ;
-    cylinder_offset = 60;
+    cylinder_offset = 90;
     translate([-tray_wall_thickness_mm, 0, 0]) {
             rotate([180,0,0]) {
                 difference() {
                     cube([tray_width_mm + tray_wall_thickness_mm, tray_insert_depth + tray_wall_thickness_mm + funnel_lip_length_mm, funnel_length_mm + tray_wall_thickness_mm]);
-                    translate([tray_wall_thickness_mm-4,tray_width_mm - cylinder_offset,-10])
+                        translate([tray_wall_thickness_mm-4,cylinder_offset - 15,-95])
                             rotate([0,90,0])
-                                cylinder(tray_width_mm+2, r=cylinder_offset+25);
+                                cylinder(tray_width_mm+2, r=110);
                 }
             }
 
@@ -115,7 +115,7 @@ module tray_funnel(funnel_length_mm) {
 }
 
 module tray() {
-    funnel_length_mm = 70;
+    funnel_length_mm = 10;
     tray_walls();
     tray_bottom();
     tray_handles();
